@@ -1,18 +1,20 @@
 // importo lo necesario para ejecutar el servidor
-import express from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
+import "reflect-metadata";
+import app from "./app";
+import { AppDataSource } from "./db";
 
-// creo una constante de express
-const app = express();
+async function main() {
+  // captura el error. y lo imprime
+  try {
+    // ejecuto la conexion a la db
+    await AppDataSource.initialize();
+    console.log("Data Base Connected");
+    // pongo a escuchar el servidor por el puerto 3000
+    app.listen("3000");
+    console.log("server on port", 3000);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-// configuro los mildelware
-// uso morgan en modo de desarrollo
-app.use(morgan('dev'));
-// uso cors para que se hagan peticiones de distintas url
-app.use(cors());
-
-// pongo a escuchar el servidor por el puerto 3000
-app.listen("3000", () => {
-  console.log("server on port", 3000)
-});
+main();
